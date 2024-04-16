@@ -72,7 +72,7 @@ SELECT Entity, Code, Year,
 TIMESTAMPDIFF(YEAR, CONCAT(Year, '-01-01'), CURDATE()) AS difference_year
 FROM infectious_cases;
 
-Task 5
+Task 5.1
 
 DROP FUNCTION IF EXISTS fn_subtract_now_year;
 
@@ -91,3 +91,23 @@ END //
 DELIMITER ;
 
 SELECT fn_subtract_now_year(1996);
+
+- Task 5.2
+
+DROP FUNCTION IF EXISTS fn_calc_illnesses;
+
+DELIMITER //
+
+CREATE FUNCTION fn_calc_illnesses(num_illnesses_per_year DOUBLE, period INT)
+RETURNS DOUBLE
+DETERMINISTIC 
+NO SQL
+BEGIN
+    DECLARE result DOUBLE;
+    SET result = num_illnesses_per_year / period;
+    RETURN result;
+END //
+
+DELIMITER ;
+
+SELECT fn_calc_illnesses(20000, 4);
