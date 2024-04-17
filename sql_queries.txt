@@ -8,9 +8,9 @@ USE pandemic;
 USE pandemic;
 
 CREATE TABLE countries(
-id INT PRIMARY KEY AUTO_INCREMENT,
-code VARCHAR(8) UNIQUE,
-country VARCHAR(32) NOT NULL UNIQUE
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(8) UNIQUE,
+    country VARCHAR(32) NOT NULL UNIQUE
 );
 
 INSERT INTO countries (code, country)
@@ -25,7 +25,7 @@ ADD country_id INT AFTER id,
 ADD CONSTRAINT fk_country_id FOREIGN KEY (country_id) REFERENCES countries(id);
 
 UPDATE cases_normalized i
-JOIN countries c ON i.code = c.code
+JOIN countries c ON i.code = c.code AND i.entity = c.country
 SET i.country_id = c.id
 WHERE i.id > 0;
 
@@ -41,7 +41,8 @@ USE pandemic;
 
 SELECT id, MAX(number_rabies) AS max_value, 
 MIN(number_rabies) AS min_value,
-AVG(number_rabies) AS average_value
+AVG(number_rabies) AS average_value,
+SUM(number_rabies) AS sum_value
 FROM cases_normalized
 WHERE number_rabies IS NOT NULL AND number_rabies <> ''
 GROUP BY id
